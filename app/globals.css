@@ -1,0 +1,142 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --radius-sm: calc(var(--radius) * .6);
+  --radius-md: calc(var(--radius) * .8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+:root { --background: oklch(.08 .02 260); --foreground: oklch(.98 .01 260); --card: oklch(.13 .025 260); --card-foreground: oklch(.98 .01 260); --primary: oklch(.9 .02 260); --primary-foreground: oklch(.12 .02 260); --secondary: oklch(.2 .03 260); --secondary-foreground: oklch(.95 .01 260); --muted: oklch(.2 .03 260); --muted-foreground: oklch(.7 .03 260); --accent: oklch(.2 .03 260); --accent-foreground: oklch(.95 .01 260); --destructive: oklch(.6 .2 25); --border: oklch(1 0 0 / 10%); --input: oklch(1 0 0 / 12%); --ring: oklch(.8 .12 210); --radius: .8rem; color-scheme: dark; }
+* { @apply border-border outline-ring/50; }
+html { scroll-behavior: smooth; }
+@font-face {
+  font-family: 'Crustaceans Signature';
+  src: url('/fonts/Crustaceans-SignatureDEMO-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  @apply bg-background text-foreground;
+  font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.display { font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif; }
+.font-crustaceans {
+  font-family: 'Crustaceans Signature', cursive, system-ui, sans-serif;
+}
+
+/* Glowing Status Badges */
+.badge-completed {
+  border-color: rgba(52, 211, 153, 0.45);
+  background: rgba(16, 185, 129, 0.12);
+  color: #6ee7b7;
+  box-shadow: 0 0 15px rgba(52, 211, 153, 0.3), inset 0 0 10px rgba(52, 211, 153, 0.15);
+}
+.badge-completed:hover {
+  box-shadow: 0 0 24px rgba(52, 211, 153, 0.55), inset 0 0 12px rgba(52, 211, 153, 0.25);
+}
+
+.badge-pursuing {
+  border-color: rgba(251, 191, 36, 0.45);
+  background: rgba(245, 158, 11, 0.12);
+  color: #fde047;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.3), inset 0 0 10px rgba(251, 191, 36, 0.15);
+}
+.badge-pursuing:hover {
+  box-shadow: 0 0 24px rgba(251, 191, 36, 0.55), inset 0 0 12px rgba(251, 191, 36, 0.25);
+}
+
+/* Glowing Navbar Link and Brand Effects */
+.nav-glow-item {
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 0 0px transparent;
+}
+.nav-glow-item:hover {
+  color: #a5f3fc;
+  text-shadow: 0 0 12px rgba(103, 232, 249, 0.85), 0 0 24px rgba(34, 211, 238, 0.5);
+}
+
+.brand-glow {
+  transition: all 0.3s ease;
+  text-shadow: 0 0 14px rgba(103, 232, 249, 0.6), 0 0 28px rgba(167, 139, 250, 0.35);
+}
+.brand-glow:hover {
+  text-shadow: 0 0 20px rgba(103, 232, 249, 0.9), 0 0 35px rgba(167, 139, 250, 0.6);
+}
+
+/* Footer Glow Line and Ambient Light */
+.footer-glow-line {
+  background: linear-gradient(90deg, transparent 5%, #22d3ee 30%, #c084fc 70%, transparent 95%);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.6), 0 0 40px rgba(192, 132, 252, 0.35);
+}
+
+.noise { position: fixed; inset: 0; pointer-events: none; opacity: .035; z-index: 50; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E"); }
+.section-wrap { @apply relative mx-auto max-w-6xl px-6 py-24 sm:px-8 sm:py-32; }
+.eyebrow { @apply font-mono text-[11px] uppercase tracking-[.24em] text-cyan-300; }
+.gradient-text { background: linear-gradient(100deg,#67e8f9,#a78bfa); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.nav-link { @apply text-sm text-white/60 transition hover:text-white; }
+.glow { position: absolute; width: 28rem; height: 28rem; border-radius: 999px; filter: blur(90px); opacity: .13; pointer-events: none; }
+.glow-cyan { background: #22d3ee; right: -15rem; top: 8rem; }.glow-purple { background: #8b5cf6; left: -20rem; bottom: -10rem; }
+.glass-card { @apply border-white/10 bg-white/[.035] text-white shadow-none backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-cyan-300/25 hover:bg-white/[.055]; }
+.placeholder { background: radial-gradient(circle at 50% 30%, rgba(103,232,249,.12), transparent 35%), repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 12px), #0e1422; }
+.profile-frame { box-shadow: 0 0 80px rgba(34,211,238,.1); }
+.field { @apply rounded-xl border-white/10 bg-black/20 text-white placeholder:text-white/30 focus:border-cyan-300/60 focus:ring-cyan-300/20; }
+  .social { @apply grid size-10 place-items-center rounded-full border border-white/10 text-white/50 transition hover:border-cyan-300/40 hover:bg-cyan-300/10 hover:text-cyan-200; }
+  .social-image-slot { @apply block size-5 rounded-md border border-dashed border-cyan-300/35 bg-cyan-300/5; }
+
+/* Watch Dogs 2 / DedSec Cyber Glitch & CRT styles */
+.crt-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.5) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.05),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.05)
+  );
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+}
+
+@keyframes dedsec-glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px) skewX(2deg); }
+  40% { transform: translate(-2px, -1px) skewY(-1deg); }
+  60% { transform: translate(3px, 1px) skewX(-2deg); }
+  80% { transform: translate(1px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.glitch-hover:hover {
+  animation: dedsec-glitch 0.22s infinite;
+  text-shadow: -2px 0 #00ffff, 2px 0 #ff0077;
+}
+
+.glitch-rgb {
+  text-shadow: -2px 0 #00ffff, 2px 0 #ff0077;
+}
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
