@@ -23,7 +23,7 @@ export function AboutSection() {
           <div className="absolute -inset-4 rounded-[2.5rem] bg-cyan-400/10 blur-2xl" />
           <Placeholder
             label="about photo"
-            src="/images/1.png"
+            src="/images/10.png"
             alt="Aritra Sarkar About Photo"
             className="aspect-square w-full rounded-[2rem] border border-white/10 shadow-2xl transition duration-500 hover:scale-[1.02] hover:border-cyan-300/40"
           />

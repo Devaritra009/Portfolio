@@ -12,6 +12,7 @@ interface PlaceholderProps {
   fill?: boolean
   width?: number
   height?: number
+  priority?: boolean
 }
 
 export function Placeholder({
@@ -22,6 +23,7 @@ export function Placeholder({
   fill = false,
   width,
   height,
+  priority = false,
 }: PlaceholderProps) {
   const [imageError, setImageError] = useState(false)
 
@@ -34,6 +36,7 @@ export function Placeholder({
           fill={fill}
           width={!fill ? width || 600 : undefined}
           height={!fill ? height || 400 : undefined}
+          priority={priority}
           className="size-full object-cover"
           onError={() => setImageError(true)}
         />

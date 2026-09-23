@@ -107,7 +107,7 @@ export function HeroSection() {
 
           {/* SOCIAL LINKS */}
           <div className="mt-7 flex flex-wrap gap-2">
-            <a href="mailto:aritrsarkarofficial027@gmail.com" aria-label="Email" className="social">
+            <a href="mailto:[EMAIL_ADDRESS]" aria-label="Email" className="social">
               <Mail className="size-6" />
             </a>
             <a href="https://www.linkedin.com/in/devaritra/" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="social">
@@ -141,7 +141,7 @@ export function HeroSection() {
             {/* HERO PROFILE PHOTO */}
             <Placeholder
               label="profile photo"
-              src="/images/4.png"
+              src="/images/hero.png"
               alt="Aritra Sarkar Profile"
               fill
               className="h-full rounded-[2rem]"

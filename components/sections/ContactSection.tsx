@@ -27,19 +27,16 @@ export function ContactSection() {
             </p>
             {/* SOCIAL ICON / IMAGE SLOTS */}
             <div className="mt-9 flex gap-3">
-              <a aria-label="GitHub" href="https://github.com" target="_blank" rel="noreferrer" className="social">
-                <img src="/images/github.png" alt="GitHub" className="size-4 object-contain" />
+              <a aria-label="GitHub" href="https://github.com/Devaritra009" target="_blank" rel="noreferrer" className="social">
+                <img src="/images/github.png" alt="GitHub" className="size-8 object-contain" />
               </a>
-              <a aria-label="LinkedIn" href="https://linkedin.com" target="_blank" rel="noreferrer" className="social">
-                <img src="/images/Linkedin.png" alt="LinkedIn" className="size-4 object-contain" />
+              <a aria-label="LinkedIn" href="https://www.linkedin.com/in/devaritra" target="_blank" rel="noreferrer" className="social">
+                <img src="/images/Linkedin.png" alt="LinkedIn" className="size-8 object-contain" />
               </a>
-              <a aria-label="Instagram" href="https://instagram.com" target="_blank" rel="noreferrer" className="social">
-                <img src="/images/Insta.png" alt="Instagram" className="size-4 object-contain" />
+              <a aria-label="Instagram" href="https://instagram.com/who_is_aritra" target="_blank" rel="noreferrer" className="social">
+                <img src="/images/Insta.png" alt="Instagram" className="size-8 object-contain" />
               </a>
-              <a aria-label="Facebook" href="https://facebook.com" target="_blank" rel="noreferrer" className="social">
-                <img src="/images/Fb.png" alt="Facebook" className="size-4 object-contain" />
-              </a>
-              <a aria-label="Email" href="mailto:aritra@example.com" className="social">
+              <a aria-label="Email" href="mailto:[aritrasarkarofficial027@gmail.com]" className="social">
                 <Mail className="size-4" />
               </a>
             </div>
