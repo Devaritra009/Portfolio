@@ -3,30 +3,51 @@
 import { motion } from 'motion/react'
 import { Placeholder } from '@/components/Placeholder'
 import { SectionHeading } from '@/components/SectionHeading'
+import { SectionSideGlow } from '@/components/SectionSideGlow'
+import { GlowingBorderTile } from '@/components/ui/GlowingBorderTile'
 
 export function AboutSection() {
   return (
-    <section id="about" className="section-wrap">
+    <section id="about" className="section-wrap relative">
+      {/* ATMOSPHERIC SIDE GLOW */}
+      <SectionSideGlow
+        leftColor="#22d3ee"
+        rightColor="#a855f7"
+        leftPosition="top-16"
+        rightPosition="bottom-20"
+        leftOpacity={0.15}
+        rightOpacity={0.15}
+      />
+
       <SectionHeading
         eyebrow="01 / About"
         title="Curious by default. Intentional by design."
         copy="I like turning complex ideas into simple, useful experiences. My work sits at the intersection of code, hardware, and visual thinking."
       />
-      <div className="grid items-center gap-12 lg:grid-cols-[.8fr_1.2fr]">
+      <div className="relative z-10 grid items-center gap-12 lg:grid-cols-[.8fr_1.2fr]">
         <motion.div
           initial={{ opacity: 0, x: -30, scale: 0.95 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="relative mx-auto max-w-sm"
+          className="relative mx-auto w-full max-w-sm"
         >
-          <div className="absolute -inset-4 rounded-[2.5rem] bg-cyan-400/10 blur-2xl" />
-          <Placeholder
-            label="about photo"
-            src="/images/10.png"
-            alt="Aritra Sarkar About Photo"
-            className="aspect-square w-full rounded-[2rem] border border-white/10 shadow-2xl transition duration-500 hover:scale-[1.02] hover:border-cyan-300/40"
-          />
+          <div className="absolute -inset-4 rounded-[2.5rem] bg-violet-400/10 blur-2xl pointer-events-none" />
+          <GlowingBorderTile
+            color1="#a855f7"
+            color2="#ec4899"
+            duration={6}
+            borderRadius="rounded-[2.2rem]"
+            className="w-full"
+            innerClassName="p-2 overflow-hidden bg-[#0c101c]"
+          >
+            <Placeholder
+              label="about photo"
+              src="/images/10.png"
+              alt="Aritra Sarkar About Photo"
+              className="aspect-square w-full rounded-[1.8rem] transition duration-500 hover:scale-[1.02]"
+            />
+          </GlowingBorderTile>
         </motion.div>
 
         <motion.div
@@ -57,3 +78,4 @@ export function AboutSection() {
     </section>
   )
 }
+

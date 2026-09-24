@@ -28,7 +28,12 @@
 }
 :root { --background: oklch(.08 .02 260); --foreground: oklch(.98 .01 260); --card: oklch(.13 .025 260); --card-foreground: oklch(.98 .01 260); --primary: oklch(.9 .02 260); --primary-foreground: oklch(.12 .02 260); --secondary: oklch(.2 .03 260); --secondary-foreground: oklch(.95 .01 260); --muted: oklch(.2 .03 260); --muted-foreground: oklch(.7 .03 260); --accent: oklch(.2 .03 260); --accent-foreground: oklch(.95 .01 260); --destructive: oklch(.6 .2 25); --border: oklch(1 0 0 / 10%); --input: oklch(1 0 0 / 12%); --ring: oklch(.8 .12 210); --radius: .8rem; color-scheme: dark; }
 * { @apply border-border outline-ring/50; }
-html { scroll-behavior: smooth; }
+html { 
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 @font-face {
   font-family: 'Crustaceans Signature';
   src: url('/fonts/Crustaceans-SignatureDEMO-Regular.otf') format('opentype');
@@ -40,7 +45,11 @@ html { scroll-behavior: smooth; }
 body {
   @apply bg-background text-foreground;
   font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
+
+
 .display { font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif; }
 .font-crustaceans {
   font-family: 'Crustaceans Signature', cursive, system-ui, sans-serif;
@@ -137,6 +146,151 @@ body {
 
 .glitch-rgb {
   text-shadow: -2px 0 #00ffff, 2px 0 #ff0077;
+}
+
+/* Automatic DedSec Glitch for "next." text */
+@keyframes dedsec-auto-glitch {
+  0%, 75%, 100% {
+    transform: translate(0) skew(0deg);
+    text-shadow: none;
+    filter: none;
+  }
+  77% {
+    transform: translate(-3px, 1.5px) skewX(4deg);
+    text-shadow: -2.5px 0 #00ffff, 2.5px 0 #ff0077;
+  }
+  79% {
+    transform: translate(3px, -2px) skewY(-2deg);
+    text-shadow: 3px 0 #00ffff, -3px 0 #ff0077;
+    filter: hue-rotate(90deg);
+  }
+  81% {
+    transform: translate(-2px, 2px) skewX(-3deg);
+    text-shadow: -3px 0 #00ffff, 2px 0 #ff0077;
+  }
+  83% {
+    transform: translate(1px, -1px);
+    text-shadow: 1px 0 #00ffff, -1px 0 #ff0077;
+    filter: none;
+  }
+  85% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+  89% {
+    transform: translate(2px, 1px) skewX(2deg);
+    text-shadow: 2px 0 #00ffff, -2px 0 #ff0077;
+  }
+  91% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+}
+
+.glitch-auto {
+  display: inline-block;
+  animation: dedsec-auto-glitch 3.4s infinite ease-in-out;
+  cursor: default;
+  transition: transform 0.15s ease;
+}
+.glitch-auto:hover {
+  animation: dedsec-glitch 0.2s infinite;
+  text-shadow: -2px 0 #00ffff, 2px 0 #ff0077;
+}
+
+/* GPU Accelerated Side Glow Floating Orbs */
+@keyframes side-glow-float-left {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.13;
+  }
+  50% {
+    transform: scale(1.12) translateY(-8px);
+    opacity: 0.20;
+  }
+}
+
+@keyframes side-glow-float-right {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.13;
+  }
+  50% {
+    transform: scale(1.1) translateY(8px);
+    opacity: 0.19;
+  }
+}
+
+.side-glow-left-anim {
+  animation: side-glow-float-left 9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.side-glow-right-anim {
+  animation: side-glow-float-right 11s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Rotating Border Beam Keyframes */
+@keyframes border-beam-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-border-beam {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* GPU Accelerated Reactor Spin */
+@keyframes reactor-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reactor-spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes eq-pulse {
+  0%, 100% {
+    transform: scaleY(0.2);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.reactor-spin-slow {
+  animation: reactor-spin 18s linear infinite;
+  will-change: transform;
+}
+
+.reactor-spin-reverse {
+  animation: reactor-spin-reverse 10s linear infinite;
+  will-change: transform;
+}
+
+.reactor-spin-fast {
+  animation: reactor-spin 3.5s linear infinite;
+  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

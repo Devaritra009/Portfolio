@@ -15,11 +15,14 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
   const [phase, setPhase] = useState<'charging' | 'cutout' | 'done'>('charging')
   const [hackerText, setHackerText] = useState('DEDSEC // INITIALIZING KERNEL')
   const [glitchActive, setGlitchActive] = useState(false)
+  
   const completedRef = useRef(false)
+  const progressRef = useRef(0)
   const onCompleteRef = useRef(onComplete)
   onCompleteRef.current = onComplete
 
   // Text scrambling effect across multiple hacking phases
+  // Decoupled from progress state renders to eliminate CPU contention and stutter
   useEffect(() => {
     const messages = [
       'DEDSEC // INITIALIZING KERNEL',
@@ -29,35 +32,45 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
       'ROOT ACCESS GRANTED // READY',
     ]
 
+    let glitchTimeout: ReturnType<typeof setTimeout> | null = null
+
     const textInterval = setInterval(() => {
       if (completedRef.current) return
-      setHackerText(() => {
-        const msgIndex = Math.min(
-          messages.length - 1,
-          Math.floor((progress / 100) * messages.length)
-        )
-        const target = messages[msgIndex]
-        return target
+      const currentProg = progressRef.current
+      const msgIndex = Math.min(
+        messages.length - 1,
+        Math.floor((currentProg / 100) * messages.length)
+      )
+      const target = messages[msgIndex]
+
+      setHackerText(
+        target
           .split('')
           .map((char) =>
-            Math.random() > 0.7 && char !== ' '
+            Math.random() > 0.75 && char !== ' '
               ? GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]
               : char
           )
           .join('')
-      })
+      )
 
-      // Occasional RGB chromatic glitch twitch
-      if (Math.random() > 0.72) {
+      // Clean occasional RGB chromatic glitch twitch without timer thrashing
+      if (Math.random() > 0.78 && !glitchTimeout) {
         setGlitchActive(true)
-        setTimeout(() => setGlitchActive(false), 90)
+        glitchTimeout = setTimeout(() => {
+          setGlitchActive(false)
+          glitchTimeout = null
+        }, 85)
       }
-    }, 75)
+    }, 80)
 
-    return () => clearInterval(textInterval)
-  }, [progress])
+    return () => {
+      clearInterval(textInterval)
+      if (glitchTimeout) clearTimeout(glitchTimeout)
+    }
+  }, [])
 
-  // Progress counter animation - calibrated to ~2.2 seconds duration
+  // Progress counter animation - calibrated to ~2.2 seconds duration with fluid cadence
   useEffect(() => {
     if (completedRef.current) return
 
@@ -65,15 +78,18 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval)
+          progressRef.current = 100
           return 100
         }
-        // Smooth progression across ~2.2 seconds (65 ticks @ 35ms)
-        const step = prev < 25 ? 1.2 : prev < 65 ? 1.5 : prev < 88 ? 1.8 : 2.5
+        // Smooth progression across ~2.2 seconds (60 ticks @ 35ms)
+        const step = prev < 25 ? 1.3 : prev < 65 ? 1.7 : prev < 88 ? 2.1 : 2.8
         const next = Math.round((prev + step) * 10) / 10
         if (next >= 100) {
           clearInterval(interval)
+          progressRef.current = 100
           return 100
         }
+        progressRef.current = next
         return next
       })
     }, 35)
@@ -157,7 +173,7 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
           initial={{ scale: 0.2, opacity: 1 }}
           animate={{ scale: 4.8, opacity: 0 }}
           transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-          className="pointer-events-none absolute left-1/2 top-1/2 -ml-44 -mt-44 size-88 rounded-full border-4 border-cyan-300 shadow-[0_0_80px_#22d3ee,0_0_120px_#ff0077]"
+          className="pointer-events-none absolute left-1/2 top-1/2 -ml-44 -mt-44 size-88 rounded-full border-4 border-cyan-300 shadow-[0_0_80px_#22d3ee,0_0_120px_#ff0077] will-change-transform"
         />
       )}
 
@@ -169,15 +185,15 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
             initial={{ opacity: 1 }}
             exit={{
               opacity: 0,
-              scale: 1.25,
-              transition: { duration: 0.35, ease: 'easeOut' },
+              scale: 1.2,
+              transition: { duration: 0.3, ease: 'easeOut' },
             }}
             className="pointer-events-auto absolute inset-0 flex flex-col items-center justify-center"
           >
             {/* CRT SCANLINES */}
             <div className="crt-scanlines absolute inset-0 opacity-75 pointer-events-none" />
 
-            {/* DEDSEC SKULL PATTERN WATERMARK (Reference Image 1) */}
+            {/* DEDSEC SKULL PATTERN WATERMARK */}
             <div
               className="absolute inset-0 opacity-[0.07] bg-repeat pointer-events-none"
               style={{
@@ -209,13 +225,9 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
                   : ''
               }`}
             >
-              {/* Outer Calibration Hex Ring */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-                className="absolute inset-0 rounded-full border border-cyan-400/30 border-dashed"
-              >
-                {['0x00', '0x1F', '0x3E', '0x7C', '0xBA', '0xF8'].map((hex, i) => (
+              {/* Outer Calibration Hex Ring - GPU Accelerated */}
+              <div className="absolute inset-0 rounded-full border border-cyan-400/30 border-dashed reactor-spin-slow">
+                {['0x00', '0x1F', '0x3E', '0x7C', '0xBA', 'xF8'].map((hex, i) => (
                   <span
                     key={hex}
                     style={{
@@ -226,14 +238,10 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
                     {hex}
                   </span>
                 ))}
-              </motion.div>
+              </div>
 
-              {/* Middle Stator Ring with Glitch Notches */}
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-                className="absolute inset-6 rounded-full border-2 border-cyan-400/40 border-t-[#ff0077] border-b-[#ff0077] shadow-[0_0_25px_rgba(34,211,238,0.25)]"
-              >
+              {/* Middle Stator Ring with Glitch Notches - GPU Accelerated */}
+              <div className="absolute inset-6 rounded-full border-2 border-cyan-400/40 border-t-[#ff0077] border-b-[#ff0077] shadow-[0_0_25px_rgba(34,211,238,0.25)] reactor-spin-reverse">
                 {[0, 90, 180, 270].map((deg) => (
                   <div
                     key={deg}
@@ -241,36 +249,18 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
                     className="absolute left-1/2 top-0 -ml-1 size-2 rounded-sm bg-[#ff0077] shadow-[0_0_10px_#ff0077]"
                   />
                 ))}
-              </motion.div>
+              </div>
 
-              {/* Inner High-Speed Cyber Ring */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'linear' }}
-                className="absolute inset-14 rounded-full border border-cyan-300/60 border-dotted shadow-[0_0_20px_#22d3ee]"
-              />
+              {/* Inner High-Speed Cyber Ring - GPU Accelerated */}
+              <div className="absolute inset-14 rounded-full border border-cyan-300/60 border-dotted shadow-[0_0_20px_#22d3ee] reactor-spin-fast" />
 
-              {/* CENTRAL CORE EYE: Featuring Watch Dogs 2 8-bit DedSec Reaper (Reference Image 2) */}
+              {/* CENTRAL CORE EYE: Featuring Watch Dogs 2 8-bit DedSec Reaper */}
               <div className="relative flex size-28 sm:size-32 items-center justify-center rounded-full border-2 border-cyan-300/80 bg-black/95 p-2 shadow-[0_0_40px_#22d3ee,inset_0_0_25px_#22d3ee]">
                 {/* 8-bit Reaper Graphic */}
-                <motion.div
-                  animate={
-                    glitchActive
-                      ? {
-                          x: [-2, 3, -1, 0],
-                          filter: [
-                            'drop-shadow(2px 0 0 #00ffff) drop-shadow(-2px 0 0 #ff0077)',
-                            'none',
-                          ],
-                        }
-                      : { scale: [0.96, 1.04, 0.96] }
-                  }
-                  transition={{
-                    duration: 1.4,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
-                  className="relative flex size-20 sm:size-24 items-center justify-center overflow-hidden rounded-full bg-black/90"
+                <div
+                  className={`relative flex size-20 sm:size-24 items-center justify-center overflow-hidden rounded-full bg-black/90 transition-transform ${
+                    glitchActive ? 'translate-x-0.5 filter drop-shadow-[2px_0_0_#00ffff]' : ''
+                  }`}
                 >
                   <img
                     src="/images/watchdogs/wd_reaper.jpg"
@@ -279,7 +269,7 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
                   />
                   {/* Glitch chromatic sheen */}
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400/20 to-transparent opacity-60 animate-pulse pointer-events-none" />
-                </motion.div>
+                </div>
 
                 {/* Pulsing Energy Beacon */}
                 <span className="absolute -inset-1 rounded-full border border-[#ff0077]/40 animate-ping pointer-events-none" />
@@ -311,23 +301,19 @@ export function ReactorCoreIntro({ onComplete }: ReactorCoreIntroProps) {
                 ARITRA SARKAR // QUANTUM EXPLOIT INITIALIZED
               </p>
 
-              {/* Equalizer Frequency Stream */}
+              {/* Equalizer Frequency Stream - GPU Keyframe Animated */}
               <div className="mt-1 flex items-end justify-center gap-1 h-3.5">
-                {[0.3, 0.9, 0.5, 1, 0.4, 0.8, 0.25, 0.95, 0.6, 0.35].map(
+                {[0.4, 0.9, 0.5, 1, 0.45, 0.8, 0.3, 0.95, 0.65, 0.35].map(
                   (h, i) => (
-                    <motion.span
+                    <span
                       key={i}
-                      animate={{ scaleY: [h, 0.15, h, 1, h] }}
-                      transition={{
-                        duration: 0.6 + (i % 4) * 0.15,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                      className="w-1 rounded-none bg-cyan-400"
+                      className="w-1 rounded-none will-change-transform"
                       style={{
                         height: '100%',
                         transformOrigin: 'bottom',
                         backgroundColor: i % 3 === 0 ? '#ff0077' : '#22d3ee',
+                        animation: `eq-pulse ${0.5 + (i % 4) * 0.15}s ease-in-out infinite`,
+                        animationDelay: `${i * 0.08}s`,
                       }}
                     />
                   )
